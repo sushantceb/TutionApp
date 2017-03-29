@@ -1,0 +1,65 @@
+<ion-view view-title="Login">
+    <ion-header-bar class="bar-positive">
+        <h1 class="title">New Student</h1>
+        <div class="buttons">
+            <button class="button button-clear" ng-click="closeNewStudent()">Close</button>
+        </div>
+    </ion-header-bar>
+    <ion-content>
+        <div class="row" ng-if='newStudentError'>
+            <div class="col assertive">{{newStudentError}}</div>
+        </div>
+        <form novalidate="" ng-submit="AddNewStudent()" id='newStudentForm'>
+            <div class="list">
+                <label class="item item-input">
+                    <span class="input-label">Name</span>
+                    <input type="text" autocomplete="off" ng-model="newstudent.name">
+                </label>
+                <label class="item item-input">
+                    <span class="input-label">Parent Name</span>
+                    <input type="text" autocomplete="off" ng-model="newstudent.parentName">
+                </label>
+                <label class="item item-input">
+                    <span class="input-label">Contact No</span>
+                    <input type="text" autocomplete="off" ng-model="newstudent.contactNo">
+                </label>
+                <label class="item item-input item-radio gender-label">
+                    <div class="input-label">
+                        Gender
+                    </div>
+                    <ion-radio ng-model="newstudent.gender" ng-value="'Male'">
+                        <i class="ion ion-man"></i> Male
+                    </ion-radio>
+                    <ion-radio ng-model="newstudent.gender" ng-value="'Female'">
+                        <i class="ion ion-woman"></i> Female
+                    </ion-radio>
+                </label>
+                <label class="item item-input item-select">
+                    <div class="input-label">
+                        Grade
+                    </div>
+                    <select ng-model="newstudent.grade">
+                        <option value="nursery">Nursery</option>
+                        <option value="lkg">LKG</option>
+                        <option value="ukg">UKG</option>
+                        <option value="1">Standard 1</option>
+                        <option value="2">Standard 2</option>
+                        <option value="3">Standard 3</option>
+                        <option value="4">Standard 4</option>
+                        <option value="5">Standard 5</option>
+                        <option value="6">Standard 6</option>
+                        <option value="7">Standard 7</option>
+                        <option value="8">Standard 8</option>
+                    </select>
+                </label>
+                <label class="item item-input">
+                    <span class="input-label">Address</span>
+                    <textarea name="address" ng-model="newstudent.address" cols="40" rows="5"></textarea>
+                </label>
+                <label class="item">
+                    <button class="button button-block button-positive" type="submit">Create</button>
+                </label>
+            </div>
+        </form>
+    </ion-content>
+</ion-view>

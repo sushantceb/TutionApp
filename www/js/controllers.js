@@ -1,56 +1,155 @@
-angular.module('starter.controllers', [])
+angular.module('tutionApp')
 
-.controller('AppCtrl', function($scope, $ionicModal, $timeout) {
+        .controller('AttendanceCtrl', function($scope, $ionicModal) {
+            console.log('AttendanceCtrl');
+            $scope.myDate = null;
+            $scope.AddStudentAttendance = function() {
+                $ionicModal.fromTemplateUrl('templates/newAttendance.html', {
+                    scope: $scope
+                }).then(function(modal) {
+                    $scope.modal = modal;
+                    $scope.modal.show();
+                });
+            };
+            
+            $scope.closeNewAttendance = function() {
+                $scope.modal.remove();
+            }
+            
+            $scope.playlists = [
+                {title: 'Reggae', id: 1},
+                {title: 'Chill', id: 2},
+                {title: 'Dubstep', id: 3},
+                {title: 'Indie', id: 4},
+                {title: 'Rap', id: 5},
+                {title: 'Cowbell', id: 6}
+            ];
 
-  // With the new view caching in Ionic, Controllers are only called
-  // when they are recreated or on app start, instead of every page change.
-  // To listen for when this page is active (for example, to refresh data),
-  // listen for the $ionicView.enter event:
-  //$scope.$on('$ionicView.enter', function(e) {
-  //});
+            $('#calendar').fullCalendar({
+                header: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'month,basicWeek,basicDay'
+                },
+                defaultDate: '2017-03-12',
+                navLinks: true, // can click day/week names to navigate views
+                editable: true,
+                eventLimit: true, // allow "more" link when too many events
+                dayClick: function(date, jsEvent, view) {
+                    $scope.AddStudentAttendance();
+//                    alert('Clicked on: ' + date.format());
+//
+//                    alert('Coordinates: ' + jsEvent.pageX + ',' + jsEvent.pageY);
+//
+//                    alert('Current view: ' + view.name);
+//
+//                    // change the day's background color just for fun
+//                    $(this).css('background-color', 'red');
 
-  // Form data for the login modal
-  $scope.loginData = {};
+                },
+                events: [
+                    {
+                        title: 'All Day Event',
+                        start: '2017-03-01'
+                    },
+                    {
+                        title: 'Long Event',
+                        start: '2017-03-07',
+                        end: '2017-03-10'
+                    },
+                    {
+                        id: 999,
+                        title: 'Repeating Event',
+                        start: '2017-03-09T16:00:00'
+                    },
+                    {
+                        id: 999,
+                        title: 'Repeating Event',
+                        start: '2017-03-16T16:00:00'
+                    },
+                    {
+                        title: 'Conference',
+                        start: '2017-03-11',
+                        end: '2017-03-13'
+                    },
+                    {
+                        title: 'Meeting',
+                        start: '2017-03-12T10:30:00',
+                        end: '2017-03-12T12:30:00'
+                    },
+                    {
+                        title: 'Lunch',
+                        start: '2017-03-12T12:00:00'
+                    },
+                    {
+                        title: 'Meeting',
+                        start: '2017-03-12T14:30:00'
+                    },
+                    {
+                        title: 'Happy Hour',
+                        start: '2017-03-12T17:30:00'
+                    },
+                    {
+                        title: 'Dinner',
+                        start: '2017-03-12T20:00:00'
+                    },
+                    {
+                        title: 'Birthday Party',
+                        start: '2017-03-13T07:00:00'
+                    },
+                    {
+                        title: 'Click for Google',
+                        url: 'http://google.com/',
+                        start: '2017-03-28'
+                    }
+                ]
+            });
+        })
 
-  // Create the login modal that we will use later
-  $ionicModal.fromTemplateUrl('templates/login.html', {
-    scope: $scope
-  }).then(function(modal) {
-    $scope.modal = modal;
-  });
+        .controller('MainCtrl', function($scope, $ionicUser) {
+            console.log('MainCtrl');
+            $scope.userDetails = $ionicUser.details;
+        })
 
-  // Triggered in the login modal to close it
-  $scope.closeLogin = function() {
-    $scope.modal.hide();
-  };
+        .controller('StudentsCtrl', function($scope, $ionicModal, $ionicDB, $state) {
+            console.log('StudentsCtrl');
+            $ionicDB.connect();
+            $scope.newstudent = {};
+            $scope.students = [];
+            var students = $ionicDB.collection('students');
 
-  // Open the login modal
-  $scope.login = function() {
-    $scope.modal.show();
-  };
+            $scope.$emit('showLoader');
 
-  // Perform the login action when the user submits the login form
-  $scope.doLogin = function() {
-    console.log('Doing login', $scope.loginData);
+            students.fetch().subscribe(function(students) {
+                $scope.students = students;
+                console.log(students);
+                $scope.$emit('hideLoader');
+            });
 
-    // Simulate a login delay. Remove this and replace with your login
-    // code if using a login system
-    $timeout(function() {
-      $scope.closeLogin();
-    }, 1000);
-  };
-})
+            $scope.AddStudentModal = function() {
+                $ionicModal.fromTemplateUrl('templates/newStudent.html', {
+                    scope: $scope
+                }).then(function(modal) {
+                    $scope.modal = modal;
+                    $scope.modal.show();
+                });
+            };
 
-.controller('PlaylistsCtrl', function($scope) {
-  $scope.playlists = [
-    { title: 'Reggae', id: 1 },
-    { title: 'Chill', id: 2 },
-    { title: 'Dubstep', id: 3 },
-    { title: 'Indie', id: 4 },
-    { title: 'Rap', id: 5 },
-    { title: 'Cowbell', id: 6 }
-  ];
-})
+            $scope.AddNewStudent = function() {
+                console.log($scope.newstudent);
+                // Start using the collection
+                students.store($scope.newstudent);
+            };
+            
+            $scope.closeNewStudent = function() {
+                $scope.modal.remove();
+            };
 
-.controller('PlaylistCtrl', function($scope, $stateParams) {
-});
+            $scope.goToStudentAttendanceView = function(student) {
+                // #/app/attendance
+
+                //console.log(student);
+                $state.go('app.attendance');
+            }
+
+        })
