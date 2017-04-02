@@ -6,61 +6,39 @@
         </div>
     </ion-header-bar>
     <ion-content>
+
+        <!--        <wy-time-picker
+                    data-dropdown-toggle-state="settings.first.dropdownToggleState"
+                    data-time-settings="settings.first.time"
+                    data-apply-callback="onApplyTimePicker()"
+                    data-clear-callback="onClearTimePicker()">
+                </wy-time-picker>-->
+        <!--        <div min-view="hour" max-view="hour" format="HH:mm A" moment-picker="myDate"> {{ myDate }} </div>-->
+<!--        <div min-view="hour" ng-model="newStudentAttendance.startTime.momentDate" locale="en" format="{{format}}" max-view="hour" moment-picker="newStudentAttendance.startTime.stringDate"> Select Time </div>-->
         
-        <wy-time-picker
-            data-dropdown-toggle-state="settings.first.dropdownToggleState"
-            data-time-settings="settings.first.time"
-            data-apply-callback="onApplyTimePicker()"
-            data-clear-callback="onClearTimePicker()">
-        </wy-time-picker>
-        <div moment-picker="myDate"> {{ myDate }} </div>
         <div class="row" ng-if='newStudentAttendanceError'>
             <div class="col assertive">{{newStudentAttendanceError}}</div>
         </div>
-        <form novalidate="" ng-submit="AddNewStudentAttendance()" id='newStudentForm'>
-            <div class="list">
-                <label class="item item-input item-select">
-                    <div class="input-label">
-                        Start Time
-                    </div>
-                    <select ng-model="newStudentAttendance.startTime">
-                        <option value="nursery">Nursery</option>
-                        <option value="lkg">LKG</option>
-                        <option value="ukg">UKG</option>
-                        <option value="1">Standard 1</option>
-                        <option value="2">Standard 2</option>
-                        <option value="3">Standard 3</option>
-                        <option value="4">Standard 4</option>
-                        <option value="5">Standard 5</option>
-                        <option value="6">Standard 6</option>
-                        <option value="7">Standard 7</option>
-                        <option value="8">Standard 8</option>
-                    </select>
-                </label>
-
-                <label class="item item-input item-select">
-                    <div class="input-label">
-                        End Time
-                    </div>
-                    <select ng-model="newStudentAttendance.endTime">
-                        <option value="nursery">Nursery</option>
-                        <option value="lkg">LKG</option>
-                        <option value="ukg">UKG</option>
-                        <option value="1">Standard 1</option>
-                        <option value="2">Standard 2</option>
-                        <option value="3">Standard 3</option>
-                        <option value="4">Standard 4</option>
-                        <option value="5">Standard 5</option>
-                        <option value="6">Standard 6</option>
-                        <option value="7">Standard 7</option>
-                        <option value="8">Standard 8</option>
-                    </select>
-                </label>
-
-                <label class="item">
-                    <button class="button button-block button-positive" type="submit">Create</button>
-                </label>
+        <div class="row">
+            <div class="col col-33">
+                Start Time
             </div>
-        </form>
+            <div class="col col-67">
+                <input type="text" min-view="hour" ng-model="newStudentAttendance.startTime.momentDate" locale="en" format="{{format}}" moment-picker="newStudentAttendance.startTime.stringDate"/>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col col-33">
+                End Time
+            </div>
+            <div class="col col-67">
+                <input type="text" min-view="hour" ng-model="newStudentAttendance.endTime.momentDate" locale="en" format="{{format}}" max-view="hour" moment-picker="newStudentAttendance.endTime.stringDate"/>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <button ng-click="AddNewStudentAttendance()"  class="button button-block button-positive" type="button">Submit</button>
+            </div>
+        </div>
     </ion-content>
 </ion-view>

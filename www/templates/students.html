@@ -9,7 +9,7 @@
             <a class="item item-icon-left item-icon-right" ng-click="goToStudentAttendanceView(student)" ng-repeat="student in students">
                 <i class="icon" ng-class="{'ion-man': student.gender === 'Male', 'ion-woman': student.gender === 'Female'}"></i>
                 <h1><span ng-bind="student.name"></span>, <span ng-bind="student.grade"></span></h1>
-                <h3><span ng-bind="student.parentName"></span>, <span ng-bind="student.contantNo"></span></h3>
+                <h3><span ng-bind="student.parentName"></span>, <span ng-bind="student.contactNo"></span></h3>
                 <p ng-bind="student.address"></p>
                 <i class="icon ion-chevron-right dark"></i>
             </a>

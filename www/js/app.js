@@ -4,33 +4,22 @@
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 // 'starter.controllers' is found in controllers.js
-angular.module('tutionApp', ['ionic', 'ionic.cloud', 'wingify.timePicker', 'moment-picker'])
-
-        .run(function($ionicPlatform, $ionicAuth) {
-            $ionicPlatform.ready(function() {
-                // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
-                // for form inputs)
-                if (window.cordova && window.cordova.plugins.Keyboard) {
-                    cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
-                    cordova.plugins.Keyboard.disableScroll(true);
-                }
-                if (window.StatusBar) {
-                    // org.apache.cordova.statusbar required
-                    StatusBar.styleDefault();
-                }
-            });
-        })
-
-        .config(function($stateProvider, $urlRouterProvider, $ionicCloudProvider) {
-
-            $ionicCloudProvider.init({
-                core: {
-                    "app_id": "32c84c7c"
-                },
-                insights: {
-                    enabled: true
-                }
-            });
+angular.module('tutionApp', ['ionic', 'moment-picker', 'firebase'])
+        .config(function($stateProvider, $urlRouterProvider, momentPickerProvider) {
+            var config = {
+                apiKey: "AIzaSyB0jOp9Vo2y9vw0bb3bBSil3OQCB16Uelw",
+                authDomain: "timesheet-f9254.firebaseapp.com",
+                databaseURL: "https://timesheet-f9254.firebaseio.com",
+                projectId: "timesheet-f9254",
+                storageBucket: "timesheet-f9254.appspot.com",
+                messagingSenderId: "1031789189495"
+            };
+//            momentPickerProvider.options({
+//                hoursFormat:   'HH:[00]',
+//                minutesStep:   15,
+//                //autoclose: true
+//            });
+            firebase.initializeApp(config);
             $stateProvider
 
                     .state('app', {
@@ -73,14 +62,30 @@ angular.module('tutionApp', ['ionic', 'ionic.cloud', 'wingify.timePicker', 'mome
         });
 var app = angular.module('tutionApp');
 
-app.controller('MenuCtrl', function($scope, $timeout, $ionicModal, $ionicAuth) {
+app.run(function($ionicPlatform) {
+    $ionicPlatform.ready(function() {
+        // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
+        // for form inputs)
+        if (window.cordova && window.cordova.plugins.Keyboard) {
+            cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
+            cordova.plugins.Keyboard.disableScroll(true);
+        }
+        if (window.StatusBar) {
+            // org.apache.cordova.statusbar required
+            StatusBar.styleDefault();
+        }
+    });
+});
+
+app.controller('MenuCtrl', function($scope, $timeout, $ionicModal, $firebaseAuth, $firebaseArray) {
     // With the new view caching in Ionic, Controllers are only called
     // when they are recreated or on app start, instead of every page change.
     // To listen for when this page is active (for example, to refresh data),
     // listen for the $ionicView.enter event:
     //$scope.$on('$ionicView.enter', function(e) {
     //});
-    $scope.loginData = {email:null, password: null};
+    $scope.authObj = $firebaseAuth();
+    $scope.loginData = {email: null, password: null};
     $scope.loginError = null;
     console.log('Menu');
 
@@ -100,34 +105,51 @@ app.controller('MenuCtrl', function($scope, $timeout, $ionicModal, $ionicAuth) {
     };
 
     $scope.logout = function() {
-        $ionicAuth.logout();
-        $scope.loginData = {email:null, password: null};
+        $scope.authObj.$signOut();
+        $scope.loginData = {email: null, password: null};
         $scope.loginError = null;
         $scope.login();
-        
+
     };
-    console.log($ionicAuth.isAuthenticated());
-    if (!$ionicAuth.isAuthenticated()) {
-        // $ionicUser is not authenticated!
-        $scope.login();
-    }
+    firebase.auth().onAuthStateChanged(function(user) {
+        //console.log(user);
+        if (!user) {
+            // No user is signed in.
+            $scope.login();
+        }
+    });
+    
     $scope.doLogin = function() {
-        console.log('Doing login', $scope.loginData);
-        if($scope.loginData.email === null || $scope.loginData.password === null || 
+        //console.log('Doing login', $scope.loginData);
+        if ($scope.loginData.email === null || $scope.loginData.password === null ||
                 $scope.loginData.email === '' || $scope.loginData.password === '') {
             $scope.loginError = 'Please fill the form';
         }
-
-        $ionicAuth.login('basic', $scope.loginData).then(function(response) {
+        $scope.authObj.$signInWithEmailAndPassword($scope.loginData.email, $scope.loginData.password).then(function(firebaseUser) {
+            //console.log("Signed in as:", firebaseUser.uid);
             $timeout(function() {
                 $scope.closeLogin();
             }, 0);
-        }, function(err) {
-            console.log(err);
+        }).catch(function(error) {
+            console.error("Authentication failed:", error);
         });
+
+//        $ionicAuth.login('basic', $scope.loginData).then(function(response) {
+//            $timeout(function() {
+//                $scope.closeLogin();
+//            }, 0);
+//        }, function(err) {
+//            console.log(err);
+//        });
     };
+//    $scope.authObj.$createUserWithEmailAndPassword("prasad.sonam86@gmail.com", "Harshit@14")
+//            .then(function(firebaseUser) {
+//                console.log("User " + firebaseUser.uid + " created successfully!");
+//            }).catch(function(error) {
+//        console.error("Error: ", error);
+//    });
 });
-app.controller('AppCtrl', function($scope, $ionicUser) {
+app.controller('AppCtrl', function($scope) {
     // With the new view caching in Ionic, Controllers are only called
     // when they are recreated or on app start, instead of every page change.
     // To listen for when this page is active (for example, to refresh data),
@@ -135,10 +157,10 @@ app.controller('AppCtrl', function($scope, $ionicUser) {
     //$scope.$on('$ionicView.enter', function(e) {
     //});
     //console.log('App', $ionicUser);
-    $scope.$on('showLoader', function(e){
-       $scope.showLoader = true; 
+    $scope.$on('showLoader', function(e) {
+        $scope.showLoader = true;
     });
-    $scope.$on('hideLoader', function(e){
-       $scope.showLoader = false; 
+    $scope.$on('hideLoader', function(e) {
+        $scope.showLoader = false;
     });
 });

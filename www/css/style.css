@@ -15,3 +15,7 @@
 /*
 */
 .students-list a.item h1 {font-size: 24px; margin-top: 0;}
+
+#calendar .marked {
+    background-color: rgba(40, 165, 76, 0.57);
+}
