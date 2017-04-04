@@ -32,7 +32,7 @@
 		"no-unused-expression": true,
 		"no-unused-new": true,
 		"no-var-keyword": true,
-		"no-var-requires": false, // mandatory to allow webpack to grab HTML, CSS, LESS files
+		"no-var-requires": false,
 		"object-literal-sort-keys": false,
 		"object-literal-shorthand": false,
 		"one-line": [true, "check-whitespace"],

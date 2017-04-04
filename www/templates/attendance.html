@@ -1,5 +1,15 @@
 <ion-view view-title="Attendance">
   <ion-content>
+    <ion-refresher disable-pulling-rotation='true'
+      pulling-text="Pull to refresh..."
+      on-refresh="loadStudentAttendance()">
+    </ion-refresher>
+    <div class="card">
+      <div class="item item-text-wrap">
+        <h1>{{studentDetails.name}}</h1>
+        <h3><span ng-bind="'Standard: '+studentDetails.grade"></span></h3>
+      </div>
+    </div>
     <div id='calendar'></div>
   </ion-content>
 </ion-view>
