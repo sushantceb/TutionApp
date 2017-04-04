@@ -1,11 +1,11 @@
-/* Empty. Add your own CSS if you like */
+/* Empty. Add your own CSS if you like 
 .spinner {
     top: 50%;
     position: absolute;
     z-index: 9999;
     left: 50%;
 }
-
+*/
 .input-label { width: 30%;}
 .item-select select { width: 70%;direction: ltr; }
 .item-radio input:checked + .radio-content .item-content {background: #18a942; color: #fff;}
@@ -19,3 +19,5 @@
 #calendar .marked {
     background-color: rgba(40, 165, 76, 0.57);
 }
+.attendance-student-detail i.ion-trash-a { font-size: 20px;}
+.icon.icon-24 {font-size: 20px; margin-right: 15px;}

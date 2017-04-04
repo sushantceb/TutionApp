@@ -1,10 +1,13 @@
-angular.module('tutionApp').controller('StudentsCtrl', function($scope, $ionicModal, $state, $timeout) {
+angular.module('tutionApp').controller('StudentsCtrl', function($scope, $ionicModal, $state,
+  $timeout, $ionicHistory) {
   console.log('StudentsCtrl');
   $scope.newstudent = {};
+  $scope.newStudentError = null;
   var students = firebase.database().ref('students');
   $scope.students = [];
-  $scope.$emit('showLoader');
+  
   $scope.loadAllStudents = function() {
+    $scope.$emit('showLoader');
     $scope.students = [];
     students.once('value', function(snapshot) {
       $timeout(function() {
@@ -13,7 +16,7 @@ angular.module('tutionApp').controller('StudentsCtrl', function($scope, $ionicMo
           var childData = childSnapshot.val();
           childData.studentId = childKey;
           $scope.students.push(childData);
-          $scope.$emit('hideLoader');          
+          $scope.$emit('hideLoader');
         });
         $scope.$broadcast('scroll.refreshComplete');
       });
@@ -28,24 +31,54 @@ angular.module('tutionApp').controller('StudentsCtrl', function($scope, $ionicMo
       $scope.modal.show();
     });
   };
+  
   $scope.AddNewStudent = function() {
-    console.log($scope.newstudent);
+    if (
+      angular.equals({}, $scope.newstudent) ||
+      !$scope.newstudent.name ||
+      ($scope.newstudent.name === '') ||
+      !$scope.newstudent.parentName ||
+      ($scope.newstudent.parentName === '') ||
+      !$scope.newstudent.contactNo ||
+      ($scope.newstudent.contactNo === '') ||
+      !$scope.newstudent.gender ||
+      ($scope.newstudent.gender === '') ||
+      !$scope.newstudent.address ||
+      ($scope.newstudent.address === '')
+      ) {
+      $scope.newStudentError = 'Please fill all the details';
+      return;
+    }
+
+    $scope.$on('$destroy', function() {
+      $scope.modal.remove();
+    });
     // Start using the collection
     students.push($scope.newstudent).then(function(ref) {
       var id = ref.key;
-      console.log("added record with id " + id);
+      //console.log("added record with id " + id);
+      $scope.newStudentError = null;
       $scope.closeNewStudent();
       $scope.loadAllStudents();
     });
   };
   $scope.closeNewStudent = function() {
+    $scope.newStudentError = null;
+    $scope.newstudent = {};
     $scope.modal.remove();
   };
   $scope.goToStudentAttendanceView = function(student) {
     sessionStorage.setItem('studentDetails', JSON.stringify(student));
+    $ionicHistory.nextViewOptions({
+      historyRoot: true
+    });
     $state.go('app.attendance');
   };
+
+  $scope.$on("$ionicView.enter", function(scopes, states) {
+    sessionStorage.removeItem('studentDetails');
+    $scope.loadAllStudents();
+  });
   
-  $scope.loadAllStudents();
 
 });

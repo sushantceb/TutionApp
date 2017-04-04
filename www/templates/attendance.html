@@ -1,15 +1,24 @@
 <ion-view view-title="Attendance">
   <ion-content>
     <ion-refresher disable-pulling-rotation='true'
-      pulling-text="Pull to refresh..."
-      on-refresh="loadStudentAttendance()">
+                   pulling-text="Pull to refresh..."
+                   on-refresh="loadStudentAttendance()">
     </ion-refresher>
-    <div class="card">
+    <div class="card attendance-student-detail">
       <div class="item item-text-wrap">
-        <h1>{{studentDetails.name}}</h1>
-        <h3><span ng-bind="'Standard: '+studentDetails.grade"></span></h3>
+        <h2 class='calm'><strong>{{studentDetails.name}}</strong></h2>
+        <h3>
+          <div class='row'>
+            <div class="col-75 col-center" ng-bind="'Standard: '+(studentDetails.grade | uppercase)"></div>
+            <div class='col-25 col-center text-right assertive' ng-click='removeStudentConfirm()'>
+              <i class="padding icon ion-trash-a assertive"></i> Delete
+            </div>
+          </div>
+        </h3>        
       </div>
     </div>
-    <div id='calendar'></div>
+    <div class='card'>
+      <div id='calendar'></div>
+    </div>
   </ion-content>
 </ion-view>
