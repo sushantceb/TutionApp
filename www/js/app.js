@@ -6,7 +6,7 @@
 // 'starter.controllers' is found in controllers.js
 angular.module('tutionApp', ['ionic', 'moment-picker', 'firebase', 'ionic-timepicker'])
         .config(function($stateProvider, $urlRouterProvider, ionicTimePickerProvider) {
-            var config = {
+            var config={
                 apiKey: "AIzaSyB0jOp9Vo2y9vw0bb3bBSil3OQCB16Uelw",
                 authDomain: "timesheet-f9254.firebaseapp.com",
                 databaseURL: "https://timesheet-f9254.firebaseio.com",
@@ -14,8 +14,8 @@ angular.module('tutionApp', ['ionic', 'moment-picker', 'firebase', 'ionic-timepi
                 storageBucket: "timesheet-f9254.appspot.com",
                 messagingSenderId: "1031789189495"
             };
-            var timePickerObj = {
-                inputTime: (((new Date()).getHours() * 60 * 60)),
+            var timePickerObj={
+                inputTime: (((new Date()).getHours()*60*60)),
                 format: 24,
                 step: 15,
                 setLabel: 'Set',
@@ -68,17 +68,17 @@ angular.module('tutionApp', ['ionic', 'moment-picker', 'firebase', 'ionic-timepi
             // if none of the above states are matched, use this as the fallback
             $urlRouterProvider.otherwise('/app/main');
         });
-var app = angular.module('tutionApp');
+var app=angular.module('tutionApp');
 
 app.run(function($ionicPlatform) {
     $ionicPlatform.ready(function() {
         // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
         // for form inputs)
-        if (window.cordova && window.cordova.plugins.Keyboard) {
+        if(window.cordova&&window.cordova.plugins.Keyboard) {
             cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
             cordova.plugins.Keyboard.disableScroll(true);
         }
-        if (window.StatusBar) {
+        if(window.StatusBar) {
             // org.apache.cordova.statusbar required
             StatusBar.styleDefault();
         }
@@ -87,59 +87,107 @@ app.run(function($ionicPlatform) {
 
 app.filter('capitalize', function() {
     return function(input) {
-        return (!!input) ? input.charAt(0).toUpperCase() + input.substr(1).toLowerCase() : '';
+        return (!!input)?input.charAt(0).toUpperCase()+input.substr(1).toLowerCase():'';
     }
 });
 
-app.controller('MenuCtrl', function($scope, $timeout, $ionicModal, $firebaseAuth, $firebaseArray, $state) {
+app.controller('MenuCtrl', function($scope, $timeout, $ionicModal, $firebaseAuth, $ionicPopup) {
     // With the new view caching in Ionic, Controllers are only called
     // when they are recreated or on app start, instead of every page change.
     // To listen for when this page is active (for example, to refresh data),
     // listen for the $ionicView.enter event:
     //$scope.$on('$ionicView.enter', function(e) {
     //});
-    $scope.authObj = $firebaseAuth();
-    $scope.loginData = {email: null, password: null};
-    $scope.loginError = null;
+    $scope.authObj=$firebaseAuth();
+    $scope.loginData={email: null, password: null};
+    $scope.data = { resetemail : null};
+    $scope.loginError=null;
     console.log('Menu');
 
     // Triggered in the login modal to close it
-    $scope.closeLogin = function() {
+    $scope.closeLogin=function() {
         $scope.modal.hide();
     };
 
+    $scope.resetPassword=function() {
+        var resetPopup = $ionicPopup.show({
+            title: 'Reset Password',
+            template: '<input type="text" ng-model="data.resetemail" />',
+            subTitle: 'Please enter your email',
+            scope: $scope,
+            buttons: [
+                {
+                    text: 'Cancel',
+                    type: 'button-dark'
+                },
+                {
+                    text: '<b>Reset</b>',
+                    type: 'button-positive',
+                    onTap: function(e) {
+                        console.log($scope.data);
+                        if(!$scope.data.resetemail) {
+                            //don't allow the user to close unless he enters wifi password
+                            e.preventDefault();
+                        } else {
+                            firebase.auth().sendPasswordResetEmail($scope.data.resetemail).then(function(res) {
+                                // Email sent.
+                                console.log(res);
+                                $timeout(function(){
+                                    $scope.loginError='We have sent reset mail, Please check your mailbox';
+                                });
+                            }, function(error) {
+                                // An error happened.
+                                $timeout(function(){
+                                    $scope.loginError=error.message;
+                                });
+                                console.log(error);
+                            });
+                        }
+                    }
+                }
+            ]
+        });
+        
+        resetPopup.then(function(res) {
+            console.log('Cancel!', res);
+        }, function(res) {
+            console.log('Tapped!', res);
+        });
+
+
+    };
     // Open the login modal
-    $scope.login = function() {
+    $scope.login=function() {
         $ionicModal.fromTemplateUrl('templates/login.html', {
             scope: $scope
         }).then(function(modal) {
-            $scope.modal = modal;
+            $scope.modal=modal;
             $scope.modal.show();
         });
     };
 
-    $scope.logout = function() {
+    $scope.logout=function() {
         $scope.authObj.$signOut();
-        $scope.loginData = {email: null, password: null};
-        $scope.loginError = null;
+        $scope.loginData={email: null, password: null};
+        $scope.loginError=null;
         $scope.login();
 
     };
     firebase.auth().onAuthStateChanged(function(user) {
         //console.log(user);
-        if (!user) {
+        if(!user) {
             // No user is signed in.
             $scope.login();
         } else {
-            $scope.userDetails = user;
+            $scope.userDetails=user;
         }
     });
 
-    $scope.doLogin = function() {
+    $scope.doLogin=function() {
         //console.log('Doing login', $scope.loginData);
-        if ($scope.loginData.email === null || $scope.loginData.password === null ||
-                $scope.loginData.email === '' || $scope.loginData.password === '') {
-            $scope.loginError = 'Please fill the form';
+        if($scope.loginData.email===null||$scope.loginData.password===null||
+                $scope.loginData.email===''||$scope.loginData.password==='') {
+            return $scope.loginError='Please fill the form';
         }
         $scope.authObj.$signInWithEmailAndPassword($scope.loginData.email, $scope.loginData.password).then(function(firebaseUser) {
             console.log("Signed in as:", firebaseUser.uid);
@@ -188,7 +236,7 @@ app.controller('AppCtrl', function($scope, $ionicLoading) {
         });
     });
 
-    $scope.hideLoading = function() {
+    $scope.hideLoading=function() {
 
     };
 });
