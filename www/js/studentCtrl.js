@@ -39,6 +39,8 @@ angular.module('tutionApp').controller('StudentsCtrl', function($scope, $ionicMo
       ($scope.newstudent.name === '') ||
       !$scope.newstudent.parentName ||
       ($scope.newstudent.parentName === '') ||
+      !$scope.newstudent.parentEmail ||
+      ($scope.newstudent.parentEmail === '') ||
       !$scope.newstudent.contactNo ||
       ($scope.newstudent.contactNo === '') ||
       !$scope.newstudent.gender ||
