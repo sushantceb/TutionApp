@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Audio demo</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <style>
+      div span.highlight {
+        color: red;
+      }
+      .carousel-inner > .item > img,
+      .carousel-inner > .item > a > img {
+        width: 50%;
+        margin: auto;
+      }
+      #audio-player {text-align: center;}
+      .carousel-caption h3 span:not(last-child) { margin-left: 5px; }
+    </style>
+    <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  </head>
+  <body>
+    <div id="myCarousel" class="carousel slide" data-ride="carousel" data-interval="false">
+
+      <!-- Wrapper for slides -->
+      <div class="carousel-inner" role="listbox">
+        <div class="item active">
+          <img src="http://fakeimg.pl/350x200/?text=1" alt="Slide 1">
+          <div class="carousel-caption">
+            <h3>Slide 1</h3>
+            <div class="audio-text"></div>
+          </div>
+        </div>
+        <div class="item">
+          <img src="http://fakeimg.pl/350x200/?text=2" alt="Slide 2">
+          <div class="carousel-caption">
+            <h3>Slide 2</h3>
+            <div class="audio-text"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Left and right controls -->
+      <a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
+        <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+        <span class="sr-only">Previous</span>
+      </a>
+      <a class="right carousel-control" href="#myCarousel" role="button" data-slide="next">
+        <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+        <span class="sr-only">Next</span>
+      </a>
+    </div>
+    <div id='audio-player'></div>
+    <script>
+      var obj = {
+        title: 'ABC',
+        coverImage: 'abc.jpg',
+        pages: [{
+            content: 'Mera naam sushant hai',
+            coverImage: 'abc.jpg',
+            audioFile: 'File1.mp3',
+            layout: 'H',
+            timing: [{
+                startTime: '0.0',
+                endTime: '0.4'
+              }, {
+                startTime: '0.4',
+                endTime: '1'
+              }, {
+                startTime: '1',
+                endTime: '1.85'
+              }, {
+                startTime: '1.85',
+                endTime: '2.90'
+              }]
+          },
+          {
+            content: 'Sushant Hello Test 2',
+            coverImage: 'abc.jpg',
+            audioFile: 'File2.mp3',
+            layout: 'H',
+            timing: [{
+                startTime: '0.02',
+                endTime: '0.10'
+              }, {
+                startTime: '0.15',
+                endTime: '0.50'
+              }, {
+                startTime: '1.0',
+                endTime: '1.50'
+              }, {
+                startTime: '1.50',
+                endTime: '2.90'
+              }]
+          }]
+      };
+      var totalPages = $('#myCarousel .item').length;
+      var currentPage = $('#myCarousel .item.active').index();
+      var audioFilePlayer = null;
+      $(window).ready(function() {
+        createAudioElement(obj.pages[currentPage].audioFile);
+        $("#myCarousel").on('slid.bs.carousel', function(e) {
+          currentPage = $('#myCarousel .item.active').index();
+          createAudioElement(obj.pages[currentPage].audioFile);
+        });
+      });
+      function createAudioElement(audioFile) {
+        $('#audio-player').empty();
+        audioFilePlayer = document.createElement('audio');
+        audioFilePlayer.setAttribute('src', audioFile);
+        audioFilePlayer.setAttribute('id', 'theAudioPlayer');
+        audioFilePlayer.controls = 'controls';
+        audioFilePlayer.load();
+        $('#audio-player').append(audioFilePlayer);
+        audioFilePlayer.addEventListener("loadeddata", function() {
+          console.log('Loaded');          
+        }, true);
+        audioFilePlayer.addEventListener('timeupdate', createHighlightTask);
+        audioFilePlayer.addEventListener('ended', function(){
+          $('#myCarousel .item.active .carousel-caption h3 span').removeClass('highlight');
+        });
+        var words = '';
+        var pageContentArray = obj.pages[currentPage].content.split(' ');
+        for (var i = 0; i < pageContentArray.length; i++) {
+          words += '<span>' + pageContentArray[i] + '</span>';
+        }
+        $('#myCarousel .item.active').find('.carousel-caption h3').html(words);
+      }
+      function createHighlightTask(e) {
+        var curTime = audioFilePlayer.currentTime.toFixed(2);
+        if(curTime <= 0) { return;}
+        var timings = obj.pages[currentPage].timing;
+        for (var i = 0; i < timings.length; i++) {
+          if (curTime >= timings[i].startTime && curTime <= timings[i].endTime) {
+            $('#myCarousel .item.active .carousel-caption h3 span').removeClass('highlight');
+            $('#myCarousel .item.active .carousel-caption h3 span').eq(i).addClass('highlight');
+          }
+        }
+      }
+    </script>
+
+  </body>
+</html>
+
