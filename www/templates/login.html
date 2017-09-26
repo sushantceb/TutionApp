@@ -2,23 +2,34 @@
     <ion-header-bar>
         <h1 class="title">Login</h1>
         <div class="buttons">
-            <button class="button button-clear" ng-click="closeLogin()">Close</button>
+<!--            <button class="button button-info" ng-click="closeLogin()">Close</button>-->
         </div>
     </ion-header-bar>
     <ion-content>
         <div class="row" ng-if='loginError'>
             <div class="col assertive">{{loginError}}</div>
         </div>
-        <form novalidate="" ng-submit="doLogin()" id='loginForm'>
+        <form novalidate ng-submit="doLogin(loginForm)" id='loginForm'>
             <div class="list">
                 <label class="item item-input">
-                    <span class="input-label">email</span>
-                    <input type="email" autocomplete="off" ng-model="loginData.email">
-
+                    <span class="input-label">Email</span>
+                    <input name="email" autocomplete="new-password" type="email" ng-model="loginData.email">
+                    <span class="error" ng-show="loginForm.input.$error.email"></span>
                 </label>
                 <label class="item item-input">
                     <span class="input-label">Password</span>
-                    <input type="password" autocomplete="off" ng-model="loginData.password">
+                    <input name="password" type="password" autocomplete="new-password" ng-model="loginData.password">
+                </label>
+                <label class="item item-input item-radio gender-label">
+                    <div class="input-label">
+                        Login Type
+                    </div>
+                    <ion-radio ng-model="loginData.loginType" ng-value="'parent'">
+                        <i class="ion ion-person-stalker"></i> Parent
+                    </ion-radio>
+                    <ion-radio ng-model="loginData.loginType" ng-value="'tutor'">
+                        <i class="ion ion-person"></i> Tutor
+                    </ion-radio>
                 </label>
                 <label class="item">
                     <button class="button button-block button-positive" type="submit">Log in</button>

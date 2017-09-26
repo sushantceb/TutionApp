@@ -4,5 +4,6 @@
   "watchPatterns": [
     "www/js/*",
     "!www/css/**/*"
-  ]
+  ],
+  "type": "ionic1"
 }

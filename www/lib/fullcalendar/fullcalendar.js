@@ -6405,6 +6405,7 @@ var DayGrid = FC.DayGrid = Grid.extend(DayTableMixin, {
 				);
 			}
 		}
+                view.publiclyTrigger('calendarRendered', null);
 	},
 
 
@@ -10550,8 +10551,8 @@ var Scroller = FC.Scroller = Class.extend({
 
 
 	setHeight: function(height) {
-     console.log(height = '100%');
-		this.scrollEl.height(height);
+            //console.log(height = '100%');
+            this.scrollEl.height(height);
 	},
 
 

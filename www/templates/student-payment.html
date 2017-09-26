@@ -1,0 +1,23 @@
+<ion-view>
+    <ion-header-bar class="bar-positive">
+        <h1 class="title">Student Payment</h1>
+        <div class="buttons">
+            <button class="button button-clear" ng-click="closeStudentPayment()">Close</button>
+        </div>
+    </ion-header-bar>
+    <ion-content>
+        <h4 class="padding">Select date till which you have received payment? {{selectedPaymentDate}}</h4>
+        <ion-list>
+            <ion-item class="item-checkbox" ng-repeat="date in dateList | orderBy: 'attendanceTimestamp'">
+                <label class="checkbox">
+                    <input ng-click="updateSelection($index, dateList, date)" ng-model="date.checked" type="checkbox">
+                </label>
+                {{date.markedAttendanceDate | date : 'dd-MMM-yyyy' }}
+            </ion-item>
+<!--            <ion-checkbox ng-repeat="date in dateList" ng-value="date.attendanceId" ng-model="$parent.payment.selectedDate">{{date.markedAttendanceDate | date : 'dd-MMM-yyyy' }}</ion-checkbox>-->
+        </ion-list>
+        <label class="item">
+            <button class="button button-block button-balanced" ng-click='markPaymentDates()' type="button">Update</button>
+        </label>
+    </ion-content>
+</ion-view>

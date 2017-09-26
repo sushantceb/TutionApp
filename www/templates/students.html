@@ -4,14 +4,14 @@
                    pulling-text="Pull to refresh..."
                    on-refresh="loadAllStudents()">
     </ion-refresher>
-    <div class="row-center">
+    <div class="row-center" ng-if="isAdmin">
       <div class="col">
         <a class="button icon-left ion-person-add button-balanced" ng-click="AddStudentModal()">New Student</a>
       </div>
     </div>
 
     <div class="list students-list">
-      <a class="item item-icon-left item-icon-right" ng-click="goToStudentAttendanceView(student)" ng-repeat="student in students">
+      <a class="item item-icon-left item-icon-right" ng-click="goToStudentAttendanceView(student)" ng-repeat="student in students track by $index">
         <i class="icon" ng-class="{'ion-man': student.gender === 'Male', 'ion-woman': student.gender === 'Female'}"></i>
         <h1 class='calm'><span ng-bind="student.name"></span></h1>
         <h3 class='positive'><span ng-bind="'Standard: '+ (student.grade | uppercase)"></span></h3>

@@ -1,40 +1,40 @@
-<ion-view view-title="Login">
+<ion-view>
     <ion-header-bar class="bar-positive">
-        <h1 class="title">New Student</h1>
+        <h1 class="title">Edit Student</h1>
         <div class="buttons">
-            <button class="button button-clear" ng-click="closeNewStudent()">Close</button>
+            <button class="button button-clear" ng-click="closeEditStudent()">Close</button>
         </div>
     </ion-header-bar>
     <ion-content>
-        <div class="row" ng-if='newStudentError'>
-            <div class="col assertive">{{newStudentError}}</div>
+        <div class="row" ng-if='editStudentError'>
+            <div class="col assertive">{{editStudentError}}</div>
         </div>
-        <form novalidate="" ng-submit="AddNewStudent()" id='newStudentForm'>
+        <form novalidate="" name="editStudentForm" ng-submit="submitEditStudent()" id='editStudentForm'>
             <div class="list">
                 <label class="item item-input">
                     <span class="input-label">Name</span>
-                    <input type="text" autocomplete="off" ng-model="newstudent.name">
+                    <input type="text" autocomplete="off" ng-model="editStudent.name">
                 </label>
                 <label class="item item-input">
                     <span class="input-label">Parent Name</span>
-                    <input type="text" autocomplete="off" ng-model="newstudent.parentName">
+                    <input type="text" autocomplete="off" ng-model="editStudent.parentName">
                 </label>
                 <label class="item item-input">
                     <span class="input-label">Parent Email</span>
-                    <input type="email" autocomplete="off" ng-model="newstudent.parentEmail">
+                    <input name="parentEmail" type="email" autocomplete="off" ng-model="editStudent.parentEmail">
                 </label>
                 <label class="item item-input">
                     <span class="input-label">Contact No</span>
-                    <input type="text" autocomplete="off" ng-model="newstudent.contactNo">
+                    <input name="contactNo" minlength="10" maxlength="10" type="text" ng-pattern="/^\d+$/" autocomplete="off" ng-model="editStudent.contactNo">
                 </label>
                 <label class="item item-input item-radio gender-label">
                     <div class="input-label">
                         Gender
                     </div>
-                    <ion-radio ng-model="newstudent.gender" ng-value="'Male'">
+                    <ion-radio ng-model="editStudent.gender" ng-value="'Male'">
                         <i class="ion ion-man"></i> Male
                     </ion-radio>
-                    <ion-radio ng-model="newstudent.gender" ng-value="'Female'">
+                    <ion-radio ng-model="editStudent.gender" ng-value="'Female'">
                         <i class="ion ion-woman"></i> Female
                     </ion-radio>
                 </label>
@@ -42,7 +42,7 @@
                     <div class="input-label">
                         Grade
                     </div>
-                    <select ng-model="newstudent.grade">
+                    <select ng-model="editStudent.grade">
                         <option value="nursery">Nursery</option>
                         <option value="lkg">LKG</option>
                         <option value="ukg">UKG</option>
@@ -60,10 +60,10 @@
                 </label>
                 <label class="item item-input">
                     <span class="input-label">Address</span>
-                    <textarea name="address" ng-model="newstudent.address" cols="40" rows="5"></textarea>
+                    <textarea name="address" ng-model="editStudent.address" cols="40" rows="5"></textarea>
                 </label>
                 <label class="item">
-                    <button class="button button-block button-balanced" type="submit">Create</button>
+                    <button class="button button-block button-balanced" type="submit">Update</button>
                 </label>
             </div>
         </form>

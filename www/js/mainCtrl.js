@@ -1,6 +1,7 @@
 angular.module('tutionApp')
         .controller('MainCtrl', function($scope, $timeout, $state, $ionicHistory) {
             console.log('MainCtrl');
+            
 //    firebase.auth().onAuthStateChanged(function(user) {
 //      if (user) {
 //        $state.go('app.students');

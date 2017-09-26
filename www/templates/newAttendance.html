@@ -2,20 +2,10 @@
     <ion-header-bar class="bar-positive">
         <h1 class="title">Make Attendance</h1>
         <div class="buttons">
-            <button class="button button-clear" ng-click="closeNewAttendance()">Close</button>
+            <button class="button button-clear dark" ng-click="closeNewAttendance()">Close</button>
         </div>
     </ion-header-bar>
     <ion-content>
-<!--        <button class="button button-calm" ng-click="showTimePicker()">Open</button>-->
-        <!--        <wy-time-picker
-                    data-dropdown-toggle-state="settings.first.dropdownToggleState"
-                    data-time-settings="settings.first.time"
-                    data-apply-callback="onApplyTimePicker()"
-                    data-clear-callback="onClearTimePicker()">
-                </wy-time-picker>-->
-        <!--        <div min-view="hour" max-view="hour" format="HH:mm A" moment-picker="myDate"> {{ myDate }} </div>-->
-<!--        <div min-view="hour" ng-model="newStudentAttendance.startTime.momentDate" locale="en" format="{{format}}" max-view="hour" moment-picker="newStudentAttendance.startTime.stringDate"> Select Time </div>-->
-        
         <div class="row" ng-if='newStudentAttendanceError'>
             <div class="col assertive">{{newStudentAttendanceError}}</div>
         </div>
@@ -26,7 +16,6 @@
             <div class="col col-67">
                 <a class="button button-icon icon ion-ios-time-outline" ng-click="showStartTimePicker()"></a>
                 <span style="line-height: 42px;padding-left: 20px;" ng-bind="newStudentAttendance.startTime  + newStudentAttendance.startTimeAmPm"></span>
-<!--                <input type="text" min-view="hour" ng-model="newStudentAttendance.startTime.momentDate" locale="en" format="{{format}}" moment-picker="newStudentAttendance.startTime.stringDate"/>-->
             </div>
         </div>
         <div class="row">
@@ -36,7 +25,6 @@
             <div class="col col-67">
                 <a class="button button-icon icon ion-ios-time-outline" ng-click="showEndTimePicker()"></a>
                 <span style="line-height: 42px;padding-left: 20px;" ng-bind="newStudentAttendance.endTime + newStudentAttendance.endTimeAmPm"></span>
-<!--                <input type="text" min-view="hour" ng-model="newStudentAttendance.endTime.momentDate" locale="en" format="{{format}}" max-view="hour" moment-picker="newStudentAttendance.endTime.stringDate"/>-->
             </div>
         </div>
         <div class="row">
