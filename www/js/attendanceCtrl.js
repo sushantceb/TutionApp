@@ -398,7 +398,15 @@ angular.module('tutionApp').controller('AttendanceCtrl', function ($scope, $time
             endTime: $scope.newStudentAttendance.endTime,
             payment: false
         }
-
+        var isDuplicate = false;
+        $scope.attendanceList.forEach(function (v, i) {
+             if(angular.equals(v.date, attendanceObj.date)) {
+                 isDuplicate = true;
+             }
+        });
+        if(isDuplicate === true) {
+            return ionicToast.show('Attendance already exist, Delete the existing', 'top', false, 5000, 'ionic-error');
+        }
         attendance.child($scope.studentDetails.studentId + '/attendance').push(attendanceObj).then(function (ref) {
             var id = ref.key;
             ionicToast.show('Attendance Added', 'top', false, 2500, 'ionic-success');
