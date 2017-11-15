@@ -54,7 +54,7 @@ angular.module('tutionApp').controller('AttendanceCtrl', function ($scope, $time
     $scope.openPaymentModal = function () {
         $scope.dateList = [];
         $scope.payment = {selectedDate: []};
-        
+
         $scope.attendanceList.forEach(function (v, i) {
             console.log($scope.calendarCurrentMonth, v.date.month);
             if ($scope.calendarCurrentMonth === v.date.month) {
@@ -144,14 +144,14 @@ angular.module('tutionApp').controller('AttendanceCtrl', function ($scope, $time
              if(typeof v.payment === 'undefined') {
              var ref = attendance.child($scope.studentDetails.studentId + '/attendance').child(v.attendanceId);
              // console.log(ref);
-             
+
              ref.update({
              payment: false
              });
              }
              });
              /*
-             
+
              */
             renderCalendar();
         }, function (error) {
@@ -186,6 +186,7 @@ angular.module('tutionApp').controller('AttendanceCtrl', function ($scope, $time
     $scope.calculateTotalHoursInCurrentMonth = function (selectedMonth) {
         $scope.totalHoursInSelectedMonth = null;
         var totalMins = 0;
+        var totalPaidMins = 0;
         $scope.attendanceList.forEach(function (v, i) {
             if (selectedMonth === v.date.month) {
                 var startTimeSplitted = v.startTime.split(':');
@@ -195,13 +196,21 @@ angular.module('tutionApp').controller('AttendanceCtrl', function ($scope, $time
                 var endMin = parseInt(endTimeSplitted[1]);
                 if (startMin > endMin) {
                     totalMins += ((hours - 1) * 60) + ((endMin + 60) - startMin);
+                    if(v.payment === true) {
+                      totalPaidMins += ((hours - 1) * 60) + ((endMin + 60) - startMin);
+                    }
                 } else {
                     totalMins += (hours * 60) + (endMin - startMin);
+                    if(v.payment === true) {
+                      totalPaidMins += (hours * 60) + (endMin - startMin);
+                    }
                 }
+
                 //console.log(hours, startMin, endMin);
             }
         });
         $scope.totalHoursInSelectedMonth = Math.floor(totalMins / 60) + ' Hrs and ' + (totalMins % 60) + ' Mins';
+        $scope.totalPaidHoursInSelectedMonth = Math.floor(totalPaidMins / 60) + ' Hrs and ' + (totalPaidMins % 60) + ' Mins';
         //console.log(totalMins / 60, totalMins % 60);
         //moment.duration(totalHours, 'hours');
     };
@@ -286,6 +295,7 @@ angular.module('tutionApp').controller('AttendanceCtrl', function ($scope, $time
             height: 350,
             navLinks: false, // can click day/week names to navigate views
             editable: true,
+            showNonCurrentDates: false,
             //eventLimit: true, // allow "more" link when too many events
             dayClick: function (date, jsEvent, view) {
                 console.log('day clicked');

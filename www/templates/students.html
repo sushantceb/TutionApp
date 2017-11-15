@@ -11,7 +11,15 @@
     </div>
 
     <div class="list students-list">
-      <a class="item item-icon-left item-icon-right" ng-click="goToStudentAttendanceView(student)" ng-repeat="student in students track by $index">
+      <a class="item item-icon-left item-icon-right" ng-click="goToStudentAttendanceView(student)" ng-if="student.active" ng-repeat="student in students track by $index">
+        <i class="icon" ng-class="{'ion-man': student.gender === 'Male', 'ion-woman': student.gender === 'Female'}"></i>
+        <h1 class='calm'><span ng-bind="student.name"></span></h1>
+        <h3 class='positive'><span ng-bind="'Standard: '+ (student.grade | uppercase)"></span></h3>
+        <h3 class='positive'><span ng-bind="student.parentName"></span>, <span ng-bind="student.contactNo"></span></h3>
+        <p ng-bind="student.address"></p>
+        <i class="icon ion-chevron-right positive"></i>
+      </a>
+      <a class="item item-icon-left item-icon-right inactive-student" ng-click="goToStudentAttendanceView(student)" ng-if="!student.active" ng-repeat="student in students track by $index">
         <i class="icon" ng-class="{'ion-man': student.gender === 'Male', 'ion-woman': student.gender === 'Female'}"></i>
         <h1 class='calm'><span ng-bind="student.name"></span></h1>
         <h3 class='positive'><span ng-bind="'Standard: '+ (student.grade | uppercase)"></span></h3>

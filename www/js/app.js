@@ -43,6 +43,18 @@ angular.module('tutionApp', ['ionic', 'moment-picker', 'firebase', 'ionic-timepi
                                 templateUrl: 'templates/students.html',
                                 controller: 'StudentsCtrl'
                             }
+                        },
+                        resolve: {
+                          isOnline: function($q, APIService, $rootScope) {
+                            $rootScope.$emit('showLoader');
+                            return APIService.isOnline('?action=isOnline').then(function(res){
+                              $rootScope.isAppOnline = true;
+                              $rootScope.$emit('hideLoader');
+                            }, function(err){
+                              $rootScope.isAppOnline = false;
+                              $rootScope.$emit('hideLoader');
+                            });
+                          }
                         }
                     })
                     .state('app.attendance', {

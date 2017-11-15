@@ -7,7 +7,7 @@
         <div class="card attendance-student-detail">
             <div class="item item-text-wrap">
                 <h2 class='calm'>
-                    <i class="icon ion-person" ng-class="{'ion-person': studentDetails.gender === 'Male', 'ion-person': studentDetails.gender === 'Female'}"></i> 
+                    <i class="icon ion-person" ng-class="{'ion-person': studentDetails.gender === 'Male', 'ion-person': studentDetails.gender === 'Female'}"></i>
                     <strong>{{studentDetails.name}}</strong>
                     <span class="dark" style="padding: 10px;" ng-click='editStudentModal()'><i class="padding icon ion-edit"></i> Edit</span>
                 </h2>
@@ -31,7 +31,7 @@
                                 <span style="padding: 10px;" ng-if="!userDetails.studentId" ng-click='removeStudentConfirm()'><i class="padding icon ion-trash-a assertive"></i> Delete</span>
                             </div>
                     </div>
-                </h3>        
+                </h3>
             </div>
         </div>
         <div class='card'>
@@ -40,6 +40,7 @@
         <div class='card text-center' ng-if="totalHoursInSelectedMonth">
             <div class='h6'>Legends: <i class="ion-stop balanced"></i> Attended</div>
             <div class='h4'>Duration: {{totalHoursInSelectedMonth}}</div>
+            <div class='h4'>Paid Duration: {{totalPaidHoursInSelectedMonth}}</div>
         </div>
         <div class="card text-center">
             <span class="dark" ng-click='openPaymentModal()'><i class="padding icon ion-cash"></i> Payment</span>

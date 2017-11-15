@@ -19,6 +19,7 @@
 /*
 */
 .students-list a.item h1 {font-size: 24px; margin-top: 0;}
+.inactive-student { background: #8f8f8f;}
 .row-center .ion-person-add { min-width: 45% !important;}
 
 /* Attendance view CSS
