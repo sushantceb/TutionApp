@@ -419,7 +419,7 @@ angular.module('tutionApp').controller('AttendanceCtrl', function ($scope, $time
         }
         attendance.child($scope.studentDetails.studentId + '/attendance').push(attendanceObj).then(function (ref) {
             var id = ref.key;
-            ionicToast.show('Attendance Added', 'top', false, 2500, 'ionic-success');
+            ionicToast.show('Attendance Added', 'top', true, 2500, 'ionic-success');
             //console.log("added record with id " + id);
             $scope.closeNewAttendance();
             $scope.loadStudentAttendance();
